@@ -10,16 +10,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.send("server is running");
-});
 
-const uri = "mongodb+srv://foodDelivery:Rm6NJtv6piFFgteg@cluster0.qtoag.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const uri = `mongodb+srv://foodDelivery:Rm6NJtv6piFFgteg@cluster0.qtoag.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 async function run() {
   try {
     await client.connect();
+    console.log('connected to database');
     const database = client.db("foodDelivery");
     const serviceCollection = database.collection("services");
     const cart_Collection = database.collection("cart");
@@ -93,6 +91,10 @@ async function run() {
 }
 run().catch(console.dir);
 
+app.get("/", (req, res) => {
+    res.send("server is running");
+  });
+
 app.listen(port, () => {
-  console.log("server is running on port", port);
+  console.log(`listening at http://localhost:${port}`);
 });
